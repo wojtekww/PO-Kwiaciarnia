@@ -1,0 +1,85 @@
+﻿
+@using Microsoft.AspNetCore.Identity
+<!DOCTYPE html>
+
+@inject SignInManager<IdentityUser> SignInManager
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/content/site.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>
+        $('#show').on('click', function () {
+            $('.center').show();
+            $(this).hide();
+        })
+
+        $('#close').on('click', function () {
+            $('.center').hide();
+            $('#show').show();
+        })
+    </script>
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div class="container">
+        <div class="col-md-3">
+            <img class="logo" src="~/images/logo.png" alt="logo" />
+        </div>
+        <div class="col-md-5 text-center title">
+            <h1 style="font-size:4.2em">Kwiaty24.pl</h1>
+        </div>
+        <div class="col-md-4 text-right padding-15">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <form asp-area="" asp-controller="Account" asp-action="Logout" id="logoutForm" method="post">
+                    <ul class="list-style-none">
+                        <li class="margin-15">Zalogowany jako: @User.Identity.Name</li>
+                        <li>
+                            <a class="btn btn-primary" href="#">Ustawienia</a>
+                            <a class="btn btn-primary" href="javascript:document.getElementById('logoutForm').submit()">Wyloguj</a>
+                        </li>
+                    </ul>
+                </form>
+            }
+            else
+            {
+                <ul class="list-style-none">
+                    <li><a id="registerLink" asp-controller="Account" asp-action="Register">Zarejestruj</a></li>
+                    <li><a id="loginLink" asp-controller="Account" asp-action="Login">Zaloguj</a></li>
+                </ul>
+            }
+        </div>
+    </div>
+
+    <nav class="navbar bar container no-padding">
+        <div class="container no-padding">
+            <div class="navbar-collapse collapse no-padding">
+                <ul class="nav navbar-nav menu">
+                    <li style="margin-left: 30px"><a asp-controller="Home" asp-action="Index">Strona główna</a></li>
+                    <li><a>Kategorie</a></li>
+                    <li><a>O firmie</a></li>
+                    <li><a asp-controller="Feedback" asp-action="Index">Kontakt</a></li>
+
+                    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Employee"))
+                    {
+                            <li style="background-color: #f2f2f2; border-bottom:none;">
+                            <a asp-controller="Employee" asp-action="Index">Panel pracownika</a></li>
+                    }
+
+                    @await Component.InvokeAsync("ShoppingCartSummary")
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container body-content bg-main  ">
+        <div class="padding-15">
+            @RenderBody()
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+﻿
+@model IEnumerable<Order>
+
+<h5 class="margin-breadcrumbs"><a asp-action="Index">Panel pracownika</a> <span class="glyphicon glyphicon-menu-right"></span> Raporty</h5>
+
+		@if (!Model.Any())
+		{
+			<tr><td colspan="3" class="text-center">Brak Zamówień w bazie danych.</td></tr>
+		}
+		else
+		{
+			<h4>Nowe zamówienia</h4>
+			<table class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th class="tab-width-15 text-right">Numer zamówienia</th>
+						<th class="tab-width-25 text-center">Szczegóły</th>
+						<th class="tab-width-25 text-center">Data</th>
+						<th class="tab-width-25 text-left">Status</th>
+					</tr>
+				</thead>
+				@foreach (Order order in Model)
+				{
+					if (order.Status == "Nowe")
+					{
+						<tr>
+							<td class="text-right">@order.OrderId</td>
+							<td class="text-center">
+								<a asp-controller="Employee" asp-action="OrderDetails" asp-route-id="@order.OrderId">
+									Sprawdź szczegóły
+								</a>
+							</td>
+							<td class="text-center">@order.OrderPlaced</td>
+							<td class="text-left">@order.Status</td>
+						</tr>
+					}
+
+				}
+			</table>
+
+			<h4>Obsłużone zamówienia</h4>
+			<table class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th class="tab-width-15 text-right">Numer zamówienia</th>
+						<th class="tab-width-25 text-center">Szczegóły</th>
+						<th class="tab-width-25 text-center">Data</th>
+						<th class="tab-width-25 text-left">Status</th>
+					</tr>
+				</thead>
+				@foreach (Order order in Model)
+				{
+					if (order.Status != "Nowe")
+					{
+						<tr>
+							<td class="text-right">@order.OrderId</td>
+							<td class="text-center">
+								<a asp-controller="Employee" asp-action="OrderDetails" asp-route-id="@order.OrderId">
+									Sprawdź szczegóły
+								</a>
+							</td>
+							<td class="text-center">@order.OrderPlaced</td>
+							<td class="text-left">@order.Status</td>
+						</tr>
+					}
+
+				}
+			</table>
+		}

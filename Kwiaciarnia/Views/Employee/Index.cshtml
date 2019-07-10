@@ -1,0 +1,41 @@
+﻿@model int
+<div class="col-sm-6 col-lg-6 col-md-6">
+	<a asp-controller="Employee" asp-action="ProductManagement">
+		<div class="thumbnail panel-margin panel-opcje panel-margin-top">
+			<img src="~/images/asortyment.png" alt="Asortyment" class="panel-padding">
+			<div class="caption bg-main">
+				<h3 class="text-center">Katalog	</h3>
+			</div>
+		</div>
+	</a>
+</div>
+<div class="col-sm-6 col-lg-6 col-md-6">
+	<a asp-controller="Employee" asp-action="OrderManagement">
+		<div class="thumbnail panel-margin panel-opcje panel-margin-top">
+			<img src="~/images/raporty.png" alt="Raporty" class="panel-padding">
+			<div class="caption bg-main ">
+				<h3 class="text-center ">Raporty 
+				@if (Model > 0) {
+					<span class="text-danger">(Nowe raporty: @Model)</span>
+					}
+				</h3>
+			</div>
+		</div>
+	</a>
+</div>
+<div class="col-sm-6 col-lg-6 col-md-6">
+	<div class="thumbnail panel-margin panel-opcje">
+		<img src="~/images/x.png" alt="Raporty" class="panel-padding">
+		<div class="caption bg-main">
+			<h3 class="text-center">Inna opcja pracownika</h3>
+		</div>
+	</div>
+</div>
+<div class="col-sm-6 col-lg-6 col-md-6">
+	<div class="thumbnail panel-margin panel-opcje">
+		<img src="~/images/x.png" alt="Raporty" class="panel-padding">
+		<div class="caption bg-main">
+			<h3 class="text-center">Inna opcja pracownika</h3>
+		</div>
+	</div>
+</div>

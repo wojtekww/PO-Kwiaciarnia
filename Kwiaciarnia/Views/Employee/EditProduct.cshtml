@@ -1,0 +1,100 @@
+﻿@model AddEditProductViewModel
+
+<h5 class="margin-breadcrumbs"><a asp-action="Index">Panel pracownika</a> <span class="glyphicon glyphicon-menu-right"></span> <a asp-action="ProductManagement">Katalog</a> <span class="glyphicon glyphicon-menu-right"></span> Produkt @Model.Id</h5>
+
+
+<br>
+<form asp-controller="Employee" asp-action="EditProduct" method="post" class="form-horizontal" role="form">
+    <div class="col-sm-6 col-lg-6 col-md-6">
+
+
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Category" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="Category" class="form-control">
+                    <option value="Akcesoria">Akcesoria</option>
+                    <option value="Bukiety">Bukiety</option>
+                    <option value="Kwiaty cięte">Kwiaty cięte</option>
+                    <option value="Kwiaty żywe">Kwiaty żywe</option>
+                </select>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Price" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group hidden">
+            <label asp-for="ImageUrl" class="col-md-3 control-label"></label>
+            <div class="col-md-9">
+                <input asp-for="ImageUrl" class="form-control" id="input-url" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+    <div class="col-md-offset-1 col-sm-5 col-lg-5 col-md-5 margin-top">
+        <div class="form-group">
+            <div class="col-md-3">
+                <div><label class="control-label">Zdjęcie</label></div>
+                <label for="upload"><span class="glyphicon glyphicon-edit pointer"></span></label>
+                <label onclick="remove();"><span class="glyphicon glyphicon-remove pointer"></span></label>
+                <input type="file" id="upload">
+            </div>
+            <div class="col-md-9">
+                <img id="photo" src="" style="max-width:136px; margin-top:-10px" />
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="form-group">
+            <label asp-for="Description" class="col-md-1 control-label"></label>
+            <div class="col-md-11">
+                <textarea asp-for="Description" class="form-control" rows="8"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-4 col-md-4 text-center">
+                <input type="submit" class="btn btn-primary" value="Zapisz" />
+                <a asp-action="ProductManagement" class="btn btn-primary">Anuluj</a>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    $("document").ready(function () {
+        var oldpath = document.getElementById("input-url").value;
+        $('#photo').attr('src', oldpath);
+        $("#upload").change(function () {
+            var path = "/images/" + document.getElementById("upload").files.item(0).name;
+            document.getElementById("input-url").value = path;
+            $('#photo').attr('src', path);
+        });
+
+    });
+    function remove() {
+        var path = "";
+        $('#photo').attr('src', path);
+    }
+</script>
+

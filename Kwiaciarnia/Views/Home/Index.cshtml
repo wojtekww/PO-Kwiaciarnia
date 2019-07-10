@@ -1,0 +1,10 @@
+﻿@model HomeViewModel
+
+
+<h2 class="margin-15">@Model.Title</h2>
+
+@foreach (var product in Model.Products)
+{
+	@Html.Partial("ProductOverviewSummary", product)
+}
+	

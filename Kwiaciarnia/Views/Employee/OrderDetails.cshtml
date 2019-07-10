@@ -1,0 +1,234 @@
+﻿@model OrderDetailsViewModel
+
+<h5 class="margin-breadcrumbs"><a asp-action="Index">Panel pracownika</a> <span class="glyphicon glyphicon-menu-right"></span> <a asp-action="OrderManagement">Raporty</a> <span class="glyphicon glyphicon-menu-right"></span> Zamówienie @Model.Order.OrderId</h5>
+<h4>Szczegóły zamówienia</h4>
+<p class="pull-right">Data: @Model.Order.OrderPlaced.ToString("dd/MM/yy")</p>
+<div class="">
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th class="tab-width-15 text-right">Id produktu</th>
+				<th class="tab-width-25">Nazwa produktu</th>
+				<th class="tab-width-20 text-center">Ilość</th>
+				<th class="tab-width-20 text-right">Cena</th>
+			</tr>
+		</thead>
+
+		@foreach (OrderDetail od in Model.OrderDetails)
+		{
+			<tr>
+				<td class="text-right">@od.ProductId</td>
+				<td>@od.ProductName</td>
+				<td class="text-center">@od.Amount</td>
+				<td class="text-right">@od.Total().ToString("c")</td>
+			</tr>
+		}
+		<tfoot>
+			<tr>
+				<td colspan="3" class="text-right">Razem:</td>
+				<td class="text-right">
+					@Model.Order.OrderTotal.ToString("c")
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+
+
+	<div class="div-fill div-actions">
+		<div class="col-sm-5 text-left">
+			<h4>
+				<span class="glyphicon glyphicon-envelope"> </span>
+				<input class="btn btn-primary btn1 width-250" value="Wyślij wiadomość do kupującego" />
+			</h4>
+		</div>
+		<div class="col-sm-7 text-left">
+			
+			<form asp-action="OrderDetails" asp-controller="Employee" asp-route-orderId="@Model.Order.OrderId" method="post"  role="form">
+				<input type="hidden" asp-for="@Model.Status" value="Anulowane" />
+				<h4>
+					<span class="glyphicon glyphicon-trash"> </span>
+					<input type="submit" class="btn btn-primary width-250" value="Anuluj zamówienie" onclick="return confirm('Czy na pewno chcesz anulować zamówienie nr @Model.Order.OrderId?');"/>
+				</h4>
+			</form>
+		</div>
+	</div>
+
+
+	<h4>Informacje o zamówieniu</h4>
+    <div class="col-sm-6 col-lg-6 col-md-6">
+        <div class="div-fill">
+            <div class="col-sm-4 text-right">
+                <p>Zapłacono:</p>
+            </div>
+            <div class="col-sm-8 text-left">
+                @if (Model.Order.DeliveryMethod.Equals("Kurier"))
+                {
+                    <p>0 PLN z @(Model.Order.OrderTotal+15) PLN</p>
+                }
+                else if (Model.Order.DeliveryMethod.Equals("Poczta"))
+                {
+                    <p>0 PLN z @(Model.Order.OrderTotal+10) PLN</p>
+                }
+                else
+                {
+                    <p>0 PLN z @Model.Order.OrderTotal PLN</p>
+                }
+            </div>
+        </div>
+        <div class="div-fill">
+            <div class="col-sm-4 text-right">
+                <p>Klient:</p>
+            </div>
+            <div class="col-sm-8 text-left">
+                <p>@Model.Order.Email</p>
+            </div>
+        </div>
+        <div class="div-fill">
+            <div class="col-sm-4 text-right">
+                <p>Telefon:</p>
+            </div>
+            <div class="col-sm-8 text-left">
+                <p>@Model.Order.PhoneNumber</p>
+            </div>
+        </div>
+        <hr class="black-hr" />
+        <div class="div-fill">
+            <div class="col-sm-4 text-right">
+                <p>Sposób dostawy:</p>
+            </div>
+            <div class="col-sm-8 text-left">
+                <p>@Model.Order.DeliveryMethod</p>
+            </div>
+        </div>
+        <div class="div-fill">
+            <div class="col-sm-4 text-right">
+                <p>Koszt dostawy:</p>
+            </div>
+            <div class="col-sm-8 text-left">
+                @if (Model.Order.DeliveryMethod.Equals("Kurier"))
+                {
+                    <p>15 PLN</p>
+                }
+                else if (Model.Order.DeliveryMethod.Equals("Poczta"))
+                {
+                    <p>10 PLN</p>
+                }
+                else
+                {
+                    <p>0 PLN</p>
+                }
+            </div>
+        </div>
+        <hr class="black-hr" />
+        <div class="div-fill">
+            <div class="col-sm-4 text-right">
+                <p>Uwagi:</p>
+            </div>
+            <div class="col-sm-8 text-left">
+                <p>@Model.Order.Comments</p>
+            </div>
+        </div>
+    </div>
+
+
+
+	<div class="col-sm-6 col-lg-6 col-md-6">
+		<form asp-action="OrderDetails" asp-controller="Employee" asp-route-orderId="@Model.Order.OrderId" method="post" class="form-horizontal" role="form">
+
+			<div class="form-group margin-bot">
+				<label asp-for="@Model.Status" class="col-md-2 control-label"></label>
+				<div class="col-md-7">
+					<select asp-for="@Model.Status" class="form-control">
+						@if (Model.Status.Equals("Nowe"))
+						{
+							<option selected value="Nowe">Nowe</option>
+						}
+						else
+						{
+							<option value="Nowe">Nowe</option>
+						}
+						@if (Model.Status.Equals("Przygotowane do wysyłki"))
+						{
+							<option selected value="Przygotowane do wysyłki">Przygotowane do wysyłki</option>
+						}
+						else
+						{
+							<option value="Przygotowane do wysyłki">Przygotowane do wysyłki</option>
+						}
+						@if (Model.Status.Equals("Wysłane"))
+						{
+							<option selected value="Wysłane">Wysłane</option>
+						}
+						else
+						{
+							<option value="Wysłane">Wysłane</option>
+						}
+						@if (Model.Status.Equals("Zrealizowane"))
+						{
+							<option selected value="Zrealizowane">Zrealizowane</option>
+						}
+						else
+						{
+							<option value="Zrealizowane">Zrealizowane</option>
+						}
+						@if (Model.Status.Equals("Anulowane"))
+						{
+							<option selected value="Anulowane">Anulowane</option>
+						}
+						else
+						{
+							<option value="Anulowane">Anulowane</option>
+						}
+					</select>
+				</div>
+				<div class="col-md-3">
+					<input type="submit" class="btn btn-primary" value="Zapisz" />
+				</div>
+			</div>
+
+		</form>
+		<div class="div-dane">
+			<h4 class="margin-minus">Dane do wysyłki</h4>
+			<p>@Model.Order.FirstName @Model.Order.LastName</p>
+			<p>@Model.Order.Address</p>
+			<p>@Model.Order.ZipCode @Model.Order.City</p>
+			<div class="glyphicon glyphicon-print print text-right"></div>
+		</div>
+	</div>
+</div>
+
+<div class="center hideform">
+
+	<h4 class="text-center">Napisz wiadomość do klienta</h4>
+	<form class="form-horizontal">
+		<div class="form-group">
+			<label class="col-md-2 control-label">Temat</label>
+			<div class="col-md-10">
+				<input class="form-control" />
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">Treść</label>
+			<div class="col-md-10">
+				<textarea rows="6"class="form-control" ></textarea>
+			</div>
+		</div>
+		<div class="form-group text-right">
+			<button type="reset" class="btn2 margin-15 btn btn-primary">Wyślij</button>
+			<button type="reset" class="btn2 margin-15 btn btn-primary">Anuluj</button>
+		</div>
+	</form>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function () {
+		$(".btn1").click(function () {
+			$(".center").show();
+		});
+		$(".btn2").click(function () {
+			$(".center").hide();
+		});
+	});
+</script>

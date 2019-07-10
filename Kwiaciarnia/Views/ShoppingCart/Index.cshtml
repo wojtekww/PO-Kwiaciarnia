@@ -1,0 +1,40 @@
+﻿@model ShoppingCartViewModel
+
+<h2>Twój koszyk</h2>
+<h4>Tutaj znajdują się Twoje produkty</h4>
+<table class="table table-bordered table-striped">
+	<thead>
+		<tr>
+			<th>Ilość</th>
+			<th>Produkt</th>
+			<th class="text-right">Cena</th>
+			<th class="text-right">Razem</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var line in Model.ShoppingCart.ShoppingCartItems)
+		{
+			<tr>
+				<td class="text-center">@line.Amount</td>
+				<td class="text-left">@line.Product.Name</td>
+				<td class="text-right">@line.Product.Price.ToString("c")</td>
+				<td class="text-right">
+					@((line.Amount * line.Product.Price).ToString("c"))
+				</td>
+			</tr>
+		}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td colspan="3" class="text-right">Suma:</td>
+			<td class="text-right">
+				@Model.ShoppingCartTotal.ToString("c")
+			</td>
+		</tr>
+	</tfoot>
+</table>
+
+<div class="text-center">
+    <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Kontynuuj zakupy</a>
+    <a class="btn btn-primary" asp-controller="Order" asp-action="Checkout">Finalizuj zamówienie</a>
+</div>

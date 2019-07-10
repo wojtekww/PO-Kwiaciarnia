@@ -1,0 +1,20 @@
+﻿@model Product
+
+<div class="col-sm-4 col-lg-4 col-md-4 .row-eq-height">
+	<div class="thumbnail" style="height:500px;">
+		<img src="@Model.ImageUrl" alt="@Model.Name">
+		<div class="caption">
+			<h4 class="pull-right">@Model.Price.ToString("c")</h4>
+			<h4>
+				<a asp-controller="Home" asp-action="Details" asp-route-id="@Model.Id">@Model.Name</a>
+			</h4>
+			<p>@Model.Description</p>
+		</div>
+		<div class="addToCart">
+			<p class="button pull-right">
+				<a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart"
+				   asp-route-productId="@Model.Id">Dodaj do koszyka</a>
+			</p>
+		</div>
+	</div>
+</div>
